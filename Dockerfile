@@ -23,7 +23,7 @@ FROM alpine:latest
 WORKDIR /root/
 COPY --from=builder /app/myapp .
 
-# Открываем порт, если необходимо
+# Открываем порт
 EXPOSE 8080
 
 # Указываем, какую команду выполнять в контейнере
