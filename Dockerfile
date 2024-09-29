@@ -2,16 +2,15 @@
 FROM golang:1.22.4 AS builder
 
 # Устанавливаем рабочую директорию
-WORKDIR /app
+WORKDIR /dev
 
-# Копируем go.mod и go.sum в контейнер
-COPY go.mod go.sum ./
+# УБРАЛ: Копируем go.mod и go.sum в контейнер
+# УБРАЛ: COPY go.mod go.sum ./
+# Копируем весь код приложения
+COPY . .
 
 # Загружаем зависимости
 RUN go mod download
-
-# Копируем весь код приложения
-COPY . .
 
 # Собираем приложение
 RUN go build -o myapp .
@@ -20,11 +19,12 @@ RUN go build -o myapp .
 FROM alpine:latest
 
 # Переносим собранное приложение в новый образ
-WORKDIR /root/
-COPY --from=builder /app/myapp .
+WORKDIR /app
+COPY --from=builder /dev/myapp .
 
+# УБРАЛ, но оставил для документации: даже если контейнер запущен с флагом -p, пусть другие знают, какой порт прослушивается.
 # Открываем порт
-EXPOSE 8080
+# УБРАЛ: EXPOSE 8080
 
 # Указываем, какую команду выполнять в контейнере
 CMD ["./myapp"]
